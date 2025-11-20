@@ -1,0 +1,1 @@
+open, read, write, close, opendir, readdir
