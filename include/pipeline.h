@@ -4,6 +4,7 @@
 #include <semaphore.h>
 #include <stddef.h>
 
+// Para OperationType
 typedef enum {
     OP_NONE = 0,
     OP_COMPRESS,
@@ -12,12 +13,26 @@ typedef enum {
     OP_DECRYPT
 } OperationType;
 
+// ⭐ Nuevo: Algoritmo de compresión
+typedef enum {
+    COMP_LZW = 0,
+    COMP_RLE
+} CompressionAlgo;
+
+/*
+ * ThreadArgs:
+ * Estructura que se pasa a cada hilo que procesa un archivo.
+ */
 typedef struct {
-    char *input_file_path;   // se liberan dentro del thread
-    char *output_file_path;  // ruta final o ruta temporal (no liberar si apunta a original de caller)
-    char *key;               // puntero a clave (no duplicado)
-    OperationType sequence[4];
-    sem_t *limiter;          // semáforo para limitar concurrencia (puede ser NULL)
+    char *input_file_path;     // Se libera dentro del thread
+    char *output_file_path;    // Puede ser temporal; se libera dentro del thread
+    char *key;                 // No se duplica; NO liberar en thread
+    OperationType sequence[4]; // Secuencia de operaciones c,d,e,u
+    sem_t *limiter;            // Puede ser NULL si no hay límite de concurrencia
+
+    // ⭐ Nuevo: algoritmo de compresión seleccionado desde main con -a rle|lzw
+    CompressionAlgo algo;
+
 } ThreadArgs;
 
 #endif

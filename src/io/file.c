@@ -86,3 +86,21 @@ unsigned char *read_file_complete(const char *path, size_t *size_out) {
     *size_out = size;
     return buffer;
 }
+
+/* --------- NUEVO: escribir buffer completo ----------- */
+int write_buffer_to_file(const char *path,
+                         const unsigned char *buf,
+                         size_t size)
+{
+    int fd = safe_open(path, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+    if (fd < 0) return 1;
+
+    if (safe_write(fd, buf, size) != 0) {
+        safe_close(fd);
+        return 1;
+    }
+
+    if (safe_close(fd) != 0) return 1;
+
+    return 0;
+}

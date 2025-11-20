@@ -24,4 +24,7 @@ int safe_close(int fd);
 // Carga un archivo COMPLETO en memoria (malloc).
 unsigned char *read_file_complete(const char *path, size_t *size_out);
 
+/* NUEVO: escribir buffer completo a archivo */
+int write_buffer_to_file(const char *path, const unsigned char *buf, size_t size);
+
 #endif
